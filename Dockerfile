@@ -5,6 +5,7 @@ ARG GRADLE_VERSION=4.2.1
 
 ENV PATH=$PATH:/opt/gradle/bin:/opt/maven/bin:/opt/nodejs12/bin
 
+
 USER root
 
 RUN apk add --update --no-cache curl unzip tar docker openrc && \
