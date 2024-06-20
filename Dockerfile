@@ -1,10 +1,9 @@
-FROM jenkins/slave:4.3-1-alpine
+FROM jenkins/slave:4.13.3-2-alpine
 
-ARG MAVEN_VERSION=3.5.4
-ARG GRADLE_VERSION=4.2.1
+ARG MAVEN_VERSION=3.9.8
+ARG GRADLE_VERSION=8.8
 
-ENV PATH=$PATH:/opt/gradle/bin:/opt/maven/bin:/opt/nodejs12/bin
-
+ENV PATH=$PATH:/opt/gradle/bin:/opt/maven/bin:/opt/nodejs/bin
 
 USER root
 
@@ -17,12 +16,14 @@ RUN apk add --update --no-cache curl unzip tar docker openrc && \
     curl -LOk https://archive.apache.org/dist/maven/maven-3/${MAVEN_VERSION}/binaries/apache-maven-${MAVEN_VERSION}-bin.zip && \
     unzip apache-maven-${MAVEN_VERSION}-bin.zip -d /opt && \
     rm -f apache-maven-${MAVEN_VERSION}-bin.zip && \
-    ln -s apache-maven-${MAVEN_VERSION} /opt/maven && \
+    ln -s /opt/apache-maven-${MAVEN_VERSION} /opt/maven && \
     mkdir -p $HOME/.m2 && \
     mkdir -p $HOME/.gradle && \
-    apk add --update-cache python python-dev py-pip build-base && \
-    pip install virtualenv && \
+    apk add --update-cache python3 python3-dev py3-pip build-base && \
+    pip3 install virtualenv && \
     rm -rf /var/cache/apk/* && \
-    apk add  --no-cache nodejs npm && \
+    apk add --no-cache nodejs npm && \
     apk add openjdk11 --repository=http://dl-cdn.alpinelinux.org/alpine/edge/community && \
     npm install -g dredd newman newman-reporter-htmlextra
+
+USER jenkins
